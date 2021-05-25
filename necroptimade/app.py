@@ -55,6 +55,8 @@ app = FastAPI(
     openapi_url=f"{BASE_URL_PREFIXES['major']}/extensions/openapi.json",
 )
 
+DUMMY_PREFIX = "/test.optimade.org"
+
 
 if CONFIG.insert_test_data:
     import bson.json_util
@@ -99,7 +101,7 @@ for exception, handler in OPTIMADE_EXCEPTIONS:
 
 # Add various endpoints to unversioned URL
 for endpoint in (info, links, references, structures, landing, versions):
-    app.include_router(endpoint.router, prefix="/test")
+    app.include_router(endpoint.router, prefix=DUMMY_PREFIX)
 
 app.mount("/static", StaticFiles(directory="./static"), name="static")
 
@@ -107,7 +109,7 @@ app.mount("/static", StaticFiles(directory="./static"), name="static")
 def add_major_version_base_url(app: FastAPI):
     """Add mandatory vMajor endpoints, i.e. all except versions."""
     for endpoint in (info, links, references, structures, landing):
-        app.include_router(endpoint.router, prefix="/test/" + BASE_URL_PREFIXES["major"])
+        app.include_router(endpoint.router, prefix=DUMMY_PREFIX + BASE_URL_PREFIXES["major"])
 
 
 def add_optional_versioned_base_urls(app: FastAPI):
@@ -119,7 +121,7 @@ def add_optional_versioned_base_urls(app: FastAPI):
     """
     for version in ("minor", "patch"):
         for endpoint in (info, links, references, structures, landing):
-            app.include_router(endpoint.router, prefix="/test/" + BASE_URL_PREFIXES[version])
+            app.include_router(endpoint.router, prefix=DUMMY_PREFIX + BASE_URL_PREFIXES[version])
 
 
 @app.on_event("startup")
