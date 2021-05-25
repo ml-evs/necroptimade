@@ -57,7 +57,8 @@ setup(
     python_requires=">=3.9",
     install_requires=[
         "optimade~=0.14",
-        "uvicorn"
+        "uvicorn",
+        "aiofiles"
     ],
     extras_require={
         "dev": dev_deps,

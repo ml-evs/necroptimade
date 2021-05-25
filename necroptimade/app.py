@@ -11,6 +11,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 with warnings.catch_warnings(record=True) as w:
     from necroptimade.config import CONFIG
@@ -99,6 +100,8 @@ for exception, handler in OPTIMADE_EXCEPTIONS:
 # Add various endpoints to unversioned URL
 for endpoint in (info, links, references, structures, landing, versions):
     app.include_router(endpoint.router, prefix="/test")
+
+app.mount("/static", StaticFiles(directory="./static"), name="static")
 
 
 def add_major_version_base_url(app: FastAPI):
