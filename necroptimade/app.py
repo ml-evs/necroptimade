@@ -1,4 +1,4 @@
-"""The OPTIMage server
+"""The nectroptimade server app.
 
 This server is based on the reference implementation in the
 optimade-python-tools package.
@@ -6,12 +6,12 @@ optimade-python-tools package.
 """
 import os
 import warnings
-from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+
+from necroptimade import landing
 
 with warnings.catch_warnings(record=True) as w:
     from necroptimade.config import CONFIG
@@ -26,14 +26,12 @@ from optimade.server.routers import (
     versions,
 )
 
-from optimade import __api_version__, __version__
+from optimade import __api_version__
 from optimade.server.entry_collections import EntryCollection
 from optimade.server.logger import LOGGER
 from optimade.server.exception_handlers import OPTIMADE_EXCEPTIONS
 from optimade.server.middleware import OPTIMADE_MIDDLEWARE
 from optimade.server.routers.utils import BASE_URL_PREFIXES
-
-from necroptimade import landing
 
 
 if os.getenv("OPTIMADE_CONFIG_FILE") is None:
@@ -109,7 +107,9 @@ app.mount("/static", StaticFiles(directory="./static"), name="static")
 def add_major_version_base_url(app: FastAPI):
     """Add mandatory vMajor endpoints, i.e. all except versions."""
     for endpoint in (info, links, references, structures, landing):
-        app.include_router(endpoint.router, prefix=DUMMY_PREFIX + BASE_URL_PREFIXES["major"])
+        app.include_router(
+            endpoint.router, prefix=DUMMY_PREFIX + BASE_URL_PREFIXES["major"]
+        )
 
 
 def add_optional_versioned_base_urls(app: FastAPI):
@@ -121,7 +121,9 @@ def add_optional_versioned_base_urls(app: FastAPI):
     """
     for version in ("minor", "patch"):
         for endpoint in (info, links, references, structures, landing):
-            app.include_router(endpoint.router, prefix=DUMMY_PREFIX + BASE_URL_PREFIXES[version])
+            app.include_router(
+                endpoint.router, prefix=DUMMY_PREFIX + BASE_URL_PREFIXES[version]
+            )
 
 
 @app.on_event("startup")

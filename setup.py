@@ -27,11 +27,7 @@ testing_deps = [
     "pytest-cov~=2.11",
     "codecov~=2.1",
 ]
-dev_deps = (
-    ["pylint~=2.8", "pre-commit~=2.11", "invoke~=1.5"]
-    + docs_deps
-    + testing_deps
-)
+dev_deps = ["pylint~=2.8", "pre-commit~=2.11", "invoke~=1.5"] + docs_deps + testing_deps
 
 setup(
     name="necroptimade",
@@ -55,11 +51,7 @@ setup(
         "Topic :: Database :: Front-Ends",
     ],
     python_requires=">=3.9",
-    install_requires=[
-        "optimade~=0.14",
-        "uvicorn",
-        "aiofiles"
-    ],
+    install_requires=["optimade~=0.14", "uvicorn", "aiofiles"],
     extras_require={
         "dev": dev_deps,
         "docs": docs_deps,
