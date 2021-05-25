@@ -16,10 +16,22 @@
         h4, p { margin-left: 2em; }
         a { color: darkred; }
         span.version {color: black; background-color: darkgrey; font-weight: bold; font-family: monospace; padding: 0em 0.5em 0em 0.5em; border-radius: 1em;}
+
+        .spinner {
+            animation: spin 20s ease-in 1, spin 2s ease-in 20s 5, spin 0.5s ease-in 30s infinite;
+            width: 100px;
+            height: 100px
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
     </style>
     </head>
     <body>
-        <img id="logo" width="100" src="/static/logo.svg"></img>
+        <div class="spinner"><img id="logo" width="100" src="/static/logo.svg"></img></div>
         <h3>This is an <a href="https://www.optimade.org">OPTIMADE</a> base URL which can be queried with an OPTIMADE client.</h3>
         <h3>OPTIMADE version:</h3>
         <h3><span class="version">{{ api_version }}</span></h3>
