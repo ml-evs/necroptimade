@@ -6,6 +6,7 @@ optimade-python-tools package.
 """
 import os
 import warnings
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -101,7 +102,11 @@ for exception, handler in OPTIMADE_EXCEPTIONS:
 for endpoint in (info, links, references, structures, landing, versions):
     app.include_router(endpoint.router, prefix=DUMMY_PREFIX)
 
-app.mount("/static", StaticFiles(directory="./static"), name="static")
+app.mount(
+    "/static",
+    StaticFiles(directory=Path(__file__).parent.joinpath("static")),
+    name="static",
+)
 
 
 def add_major_version_base_url(app: FastAPI):
