@@ -51,7 +51,7 @@ setup(
         "Topic :: Database :: Front-Ends",
     ],
     python_requires=">=3.9",
-    install_requires=["optimade~=0.14", "uvicorn", "aiofiles"],
+    install_requires=["optimade~=0.14", "uvicorn", "aiofiles", "pyyaml==5.4.1"],
     extras_require={
         "dev": dev_deps,
         "docs": docs_deps,
