@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+
+  necroptimade:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT: 8000
+    ports:
+      - '3214:8000'
