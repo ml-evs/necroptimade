@@ -9,13 +9,6 @@ updates:
   target-branch: main
   labels:
   - dependency_updates
-- package-ecosystem: gitsubmodule
-  directory: "/"
-  schedule:
-    interval: daily
-  target-branch: main
-  labels:
-  - providers_updates
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
