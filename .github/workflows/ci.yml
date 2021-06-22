@@ -108,7 +108,7 @@ jobs:
         index: yes
         validator version: latest
 
-    - name: Trigger spawn event
+    - name: Trigger default spawn event
       run: |
         curl http://localhost:3214/extensions/spawn
 
@@ -117,6 +117,19 @@ jobs:
       with:
         port: 3214
         path: '/127.0.0.1:8000/static/test_structures.json'
+        all versioned paths: yes
+        index: no
+        validator version: latest
+
+    - name: Trigger local file spawn event
+      run: |
+        curl http://localhost:3214/extensions/spawn?loc=./necroptimade/static/test_structures.json
+
+    - name: Validate spawned implementation
+      uses: Materials-Consortia/optimade-validator-action@v2.5.0
+      with:
+        port: 3214
+        path: '/app/necroptimade/static/test_structures.json'
         all versioned paths: yes
         index: no
         validator version: latest
