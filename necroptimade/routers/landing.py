@@ -11,7 +11,7 @@ from optimade.server.routers import ENTRY_COLLECTIONS
 from optimade.server.routers.utils import meta_values, get_base_url
 from optimade.server.config import CONFIG
 
-template_dir = Path(__file__).parent.joinpath("static").resolve()
+template_dir = Path(__file__).parent.resolve()
 TEMPLATES = Jinja2Templates(directory=[template_dir])
 
 

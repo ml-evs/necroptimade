@@ -13,10 +13,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from optimade.server.routers import (
-    info,
+    index_info,
     links,
-    references,
-    structures,
     versions,
 )
 
@@ -66,25 +64,26 @@ for exception, handler in OPTIMADE_EXCEPTIONS:
     app.add_exception_handler(exception, handler)
 
 # Add various endpoints to unversioned URL
-for endpoint in (info, links, landing, versions):
+for endpoint in (index_info, links, landing, versions):
     app.include_router(endpoint.router, prefix=APP_PREFIX)
 
 # Mount some static files for testing
+STATIC_DIR = Path(__file__).parent.joinpath("static")
 app.mount(
     "/static",
-    StaticFiles(directory=Path(__file__).parent.joinpath("static")),
+    StaticFiles(directory=STATIC_DIR),
     name="static",
 )
 
 # Add the spawn endpoint
 from necroptimade.routers import spawn_router
 
-app.include_router(spawn_router, prefix=APP_PREFIX)
+app.include_router(spawn_router, prefix=APP_PREFIX + "/extensions")
 
 
 def add_major_version_base_url(app: FastAPI):
     """Add mandatory vMajor endpoints, i.e. all except versions."""
-    for endpoint in (info, links, references, structures, landing):
+    for endpoint in (index_info, links, landing):
         app.include_router(
             endpoint.router, prefix=APP_PREFIX + BASE_URL_PREFIXES["major"]
         )
@@ -98,7 +97,7 @@ def add_optional_versioned_base_urls(app: FastAPI):
     ```
     """
     for version in ("minor", "patch"):
-        for endpoint in (info, links, references, structures, landing):
+        for endpoint in (index_info, links, landing):
             app.include_router(
                 endpoint.router, prefix=APP_PREFIX + BASE_URL_PREFIXES[version]
             )

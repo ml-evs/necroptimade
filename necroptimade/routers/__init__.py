@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends, Request
 
-from necroptimade.routers.spawn import spawn_optimade_app
-
 spawn_router = APIRouter()
 
 
@@ -9,4 +7,6 @@ spawn_router = APIRouter()
     "/spawn",
 )
 def spawn_optimade_endpoint(request: Request, params=Depends()):
+    from necroptimade.routers.spawn import spawn_optimade_app
+
     return spawn_optimade_app(request=request, params=params)
