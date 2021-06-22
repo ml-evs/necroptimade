@@ -4,9 +4,11 @@ This server is based on the reference implementation in the
 optimade-python-tools package.
 
 """
-import os
 import warnings
 from pathlib import Path
+
+with warnings.catch_warnings(record=False) as _:
+    from necroptimade.config import CONFIG
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,30 +21,13 @@ from optimade.server.routers import (
 )
 
 from optimade import __api_version__
-from optimade.server.logger import LOGGER
 from optimade.server.exception_handlers import OPTIMADE_EXCEPTIONS
 from optimade.server.middleware import OPTIMADE_MIDDLEWARE
 from optimade.server.routers.utils import BASE_URL_PREFIXES
 
 from necroptimade.routers import landing
 
-with warnings.catch_warnings(record=True) as w:
-    from necroptimade.config import CONFIG
-
-    config_warnings = w
-
 APP_PREFIX = ""
-
-if os.getenv("OPTIMADE_CONFIG_FILE") is None:
-    LOGGER.warn(
-        f"Invalid config file or no config file provided, running server with default settings. Errors: "
-        f"{[warnings.formatwarning(w.message, w.category, w.filename, w.lineno, '') for w in config_warnings]}"
-    )
-else:
-    LOGGER.info(f"Loaded settings from {os.getenv('OPTIMADE_CONFIG_FILE')}.")
-
-if CONFIG.debug:  # pragma: no cover
-    LOGGER.info("DEBUG MODE")
 
 app = FastAPI(
     root_path=CONFIG.root_path,
