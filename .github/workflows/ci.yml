@@ -119,4 +119,4 @@ jobs:
         path: '/127.0.0.1:8000/static/test_structures.json'
         all versioned paths: yes
         index: no
-        validator version: ${{ github.sha }}  # This ensures the head of a PR or latest push commit is tested
+        validator version: latest
