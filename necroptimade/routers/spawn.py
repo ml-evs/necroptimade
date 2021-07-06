@@ -60,7 +60,7 @@ def spawn_optimade_app(request, params) -> LinksResponse:
         homepage="https://necroptimade.herokuapp.com",
         description=description,
         aggregate="no",
-        no_aggregate_reason="This is an emphemeral NecrOPTIMADE instance.",
+        no_aggregate_reason="This is an ephemeral NecrOPTIMADE instance.",
     )
 
     link = LinksResource(
