@@ -73,7 +73,7 @@ jobs:
       run: pytest -rs -vvv --cov=./optimage/ --cov-report=xml tests/
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3.1.0
+      uses: codecov/codecov-action@v3.1.1
       with:
         name: project
         file: ./coverage.xml
