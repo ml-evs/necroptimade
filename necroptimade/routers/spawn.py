@@ -1,7 +1,9 @@
 from urllib.parse import urlparse
 from pathlib import Path
 import requests
+
 import bson.json_util as json
+from fastapi import Query
 
 from optimade.server.routers.utils import get_base_url
 from optimade.server.routers import info, links, structures, references
@@ -13,12 +15,18 @@ from optimade.models import (
 )
 from optimade.server.routers.utils import BASE_URL_PREFIXES
 from optimade.server.routers import versions
+from optimade import __api_version__
 from necroptimade.app import app as APP
 
 ACTIVE = set()
 
+class SpawnParams:
+    def __init__(
+        self,
+        *,
+        doi: str | None = Query(None, description="A DOI to resolve and pull data from.")
 
-def spawn_optimade_app(request, params) -> LinksResponse:
+def spawn_optimade_app(request, params: SpawnParams) -> LinksResponse:
     """Creates a new OPTIMADE API based on the data
     found at the passed location. If the API already
     exists at that base URL, do not do anything.
@@ -76,7 +84,7 @@ def spawn_optimade_app(request, params) -> LinksResponse:
         data=[link],
         meta=ResponseMeta(
             more_data_available=False,
-            api_version="1.0.0",
+            api_version=__api_version__,
             query={"representation": str(request.url)},
             data_returned=1,
             data_available=1,
@@ -128,3 +136,25 @@ def ingest_data(loc: str) -> None:
         doc["immutable_id"] = str(doc["immutable_id"])
 
     structures.structures_coll.insert(data)
+
+
+def ingest_from_doi(doi: str) -> None:
+
+    if not doi.startswith("http"):
+        doi = "https://doi.org/" + doi
+
+    headers = {"Accept": "application/json, application/ld+json"}
+    response = requests.get(doi, headers=headers, timeout=5)
+
+    if response.status_code == 200:
+        data = response.json()
+
+    if data.get("@context") == "http://schema.org" and data.get("@type") == "Dataset":
+        _ingest_datacite_metadata(data)
+
+
+def _ingest_datacite_metadata(data):
+
+    record_url = data["identifier"]["value"]
+    
+
